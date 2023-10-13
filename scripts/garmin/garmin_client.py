@@ -4,7 +4,6 @@ from enum import Enum, auto
 
 
 import garth
-
 from garmin_url_dict import GARMIN_URL_DICT
 
 logger = logging.getLogger(__name__)
@@ -80,7 +79,12 @@ class GarminClient:
             "file": (file_base_name, open(activity_path, "rb" or "r")),
         }
         url = GARMIN_URL_DICT["garmin_connect_upload"]
-        return self.garthClient.client.post("connectapi", url, files=files, api=True)
+        response = None
+        try:
+          response = self.garthClient.client.post("connectapi", url, files=files, api=True)
+        except Exception as e:
+            response = e.error.response
+        return response
     else:
         pass
   
